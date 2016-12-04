@@ -1,0 +1,141 @@
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="style.css"/>
+<script src="cmdline.js"></script>
+<script>
+var ytready = false
+inityt = function() {
+	var tag = document.createElement('script');
+
+	tag.src = "https://www.youtube.com/iframe_api";
+	var firstScriptTag = document.getElementsByTagName('script')[0];
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+	// 3. This function creates an <iframe> (and YouTube player)
+	//    after the API code downloads.
+}
+function onYouTubeIframeAPIReady() {
+	ytready = true
+}
+ytframe = function(id, pid) {
+	if (!ytready) {
+		console.log("yt not ready yet")
+		return
+	}
+	// 4. The API will call this function when the video player is ready.
+	new YT.Player(pid, {
+		height: '',
+		width: '',
+		videoId: id,
+		playerVars: { 'disablekb': 1, 'controls': 0 },
+		events: {
+			'onReady': onPlayerReady,
+			'onStateChange': onPlayerStateChange
+		}
+	});
+	
+	function onPlayerReady(event) {
+		event.target.playVideo();
+	}
+
+//	var done = false;
+	function onPlayerStateChange(event) {
+		// do some stuff?
+		if (event.data == YT.PlayerState.PLAYING) {
+			console.log("pschange: ", event)
+//			setTimeout(stopVideo, 6000);
+//			done = true;
+		}
+	}
+
+//	function stopVideo() {
+//		document..stopVideo();
+//	}
+//	return player
+}
+
+ytplayerid=0
+getytplayerid = function() {
+	ret="ytp"+ytplayerid;
+	ytplayerid += 1;
+	return ret;
+}
+addytdiv = function(id) {
+	str=document.createElement("div")
+	str.className += "stream"
+	div=document.createElement("div")
+	div.id=getytplayerid()
+	str.appendChild(div)
+	addstream(str)
+	ytframe(id, div.id)
+	document.getElementById(div.id).tabindex="-1"
+}
+addstream = function(div) {
+	cts = document.getElementsByClassName("container")
+	var c = cts[0]
+	if(cts[0].childElementCount > 0)
+		c = cts[1]
+	c.appendChild(div)
+	strs.push(div)
+}
+
+window.onload = function() {
+	initcmdline()
+	inityt()
+}
+cmds = {
+	"open": function(args) {
+		console.log("open ",args)
+	},
+	"youtube": function(args) {
+		console.log("yt", args)
+		addytdiv(args[0])
+	},
+}
+function handleKeyKEY(k) {
+	switch (k) {
+	case ":":
+		cmdline.focus()
+		break
+	case "j":
+		focusnext(1)
+		break
+	case "k":
+		focusnext(-1)
+		break
+	case "s":
+		setcurmaster()
+		break
+	}
+}
+cmds["yt"] = cmds["youtube"]
+var cur
+var strs = new Array();
+focusnext = function(dir) {
+	if (strs.length === 0) return
+	strs[cur].id = ''
+	cur += dir;
+	if (cur < 0) cur = strs.length - 1
+	if (cur >= strs.length) cur = 0
+	strs[cur].id = 'cur'
+}
+setcurmaster = function() {
+	master = document.getElementById("master")
+	slave = document.getElementsByClassName("container")[1]
+	if (master == null || slave == null) {
+		console.error("couldn't find master and slave container")
+		return
+	}
+	master.removeChild(strs[0])
+	slave.removeChild(strs[cur])
+	master.appendChild(strs[cur])
+	slave.appendChild(strs[0])
+}
+</script>
+</head>
+<body class="horz">
+<input type="text" tabindex="-1" class="cmdline"/>
+<div class="container" id="master"></div>
+<div class="container"></div>
+</body>
+</html>
