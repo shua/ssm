@@ -109,7 +109,7 @@ function handleKeyKEY(k) {
 	}
 }
 cmds["yt"] = cmds["youtube"]
-var cur
+var cur = 0
 var strs = new Array();
 focusnext = function(dir) {
 	if (strs.length === 0) return
@@ -126,10 +126,13 @@ setcurmaster = function() {
 		console.error("couldn't find master and slave container")
 		return
 	}
-	master.removeChild(strs[0])
-	slave.removeChild(strs[cur])
-	master.appendChild(strs[cur])
-	slave.appendChild(strs[0])
+	master.insertBefore(strs[1], strs[0])
+	tmp = document.createElement("span")
+	master.appendChild(tmp)
+	slave.insertBefore(strs[cur], tmp)
+
+	strs.splice(0,0,strs.splice(cur,1)[0])
+	cur = 0
 }
 </script>
 </head>
