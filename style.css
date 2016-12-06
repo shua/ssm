@@ -99,11 +99,15 @@ pre {
 }
 pre code { border: 0; }
 p {
-	margin: 0.1em;
+	margin: 0.2em 1em;
+}
+h1 {
+	font-weight: normal;
+	font-size: 1em;
+	margin-top: 1em;
 }
 .help img {
 	margin-top: -30px;
-	margin-bottom: 0.5em;
 	width: 100px;
 	height: 100px;
 	image-rendering: optimizeSpeed;

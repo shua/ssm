@@ -124,13 +124,13 @@ document.onkeypress = function(e) {
 	// do I want to support ctl/alt/meta?
 	//k = strfromkeyEvt(e)
 	k=String.fromCharCode(e.keyCode)
-	handleKey(k)
+	handleKeyModal(k)
 }
 document.onkeydown = function(e) {
 	switch(e.keyCode) {
 		case KeyEvent.DOM_VK_ESCAPE:
 		case KeyEvent.DOM_VK_RETURN:
-			handleKey(keyCodeStr[e.keyCode])
+			handleKeyModal(keyCodeStr[e.keyCode])
 	}
 }
 function strfromkeyEvt(e) {
@@ -142,7 +142,7 @@ function strfromkeyEvt(e) {
 	k+=String.fromCharCode(e.keyCode)
 	return k
 }
-function handleKey(k) {
+function handleKeyModal(k) {
 	if (k == "") return
 	switch(mode) {
 	case "CMD":
@@ -153,6 +153,7 @@ function handleKey(k) {
 		break
 	}
 }
+function handleKeyKEY(k) {}
 function handleKeyCMD(k) {
 	switch(k) {
 	case "ESCAPE":

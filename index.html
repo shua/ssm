@@ -7,46 +7,12 @@
 <script src="stream.js"></script>
 <script src="http://player.twitch.tv/js/embed/v1.js"></script>
 <script>
-
-function addtw(ch) {
-	console.log(ch)
-	str=document.createElement("div")
-	str.classList.add("stream")
-	div=document.createElement("div")
-	div.id=uniqpid()
-	str.appendChild(div)
-	str.mute = function(m) {
-		if(this.player == null) return
-		if(arguments.length === 0)
-			m = !this.player.getMuted()
-		this.player.setMuted(m)
-	}
-	str.play = function(p) {
-		if(this.player == null) return
-		if(arguments.length === 0)
-			p = this.player.isPaused()
-		console.log(p)
-		if(p)
-			this.player.play()
-		else
-			this.player.pause()
-	}
-	addstream(str)
-	str.player = twframe(ch, div.id)
-}
-
-function twframe(ch, pid) {
-	return new Twitch.Player(pid, {
-		width: '',
-		height: '',
-		channel: ch
-	})
-}
-
 function addstream(div) {
 	ct = document.getElementsByClassName("container")[0]
 	ct.appendChild(div)
 	if(strs.length !== 0) strs[cur].id=""
+	if(div.mute == null) div.mute = () => true
+	if(div.play == null) div.play = () => true
 	cur = strs.push(div) - 1
 	div.id="cur"
 	setcurmaster()
@@ -55,8 +21,10 @@ function addstream(div) {
 window.onload = function() {
 	initcmdline()
 	inityt()
+	handleKeyKEY = handlekey
+	helpstr = document.getElementsByClassName("help")[0]
 }
-function handleKeyKEY(k) {
+function handlekey(k) {
 	switch (k) {
 	case ":":
 		cmdline.focus()
@@ -105,12 +73,17 @@ cmds = {
 	"quit": function(args) {
 		if(strs.length > 0)
 			kill(cur)
+	},
+	"help": function(args) {
+		if(helpstr.parentElement == null)
+			addstream(helpstr)
 	}
 }
 cmds["yt"] = cmds["youtube"]
 var cur = 0
 var strs = new Array();
 var num_master = 1
+var helpstr
 function focusnext(dir) {
 	if (strs.length === 0) return
 	strs[cur].id = ""
@@ -165,7 +138,7 @@ mute.ismuted = false
 function play() {
 	play.isplaying = !play.isplaying
 	for(s in strs)
-		strs[s].play()
+		strs[s].play(play.isplaying)
 }
 play.isplaying = true
 function kill(i) {
@@ -188,17 +161,24 @@ function morebirds() {
 <input type="text" tabindex="-1" class="cmdline"/>
 <div class="container">
 <div class="stream help master">
-	<img src="ssm_w.png"/>
-	<p>As of right now, the cmdline can be brought up by pressing <code>:</code></p>
-	<p>Available commands are</p>
-<pre><code>youtube VIDEOID
-twitch CHANNEL
-quit
+	<img src="ssm_w.png"/>Simple Stream Manager
+	<p>
+	As of right now, the cmdline can be brought up by 
+	pressing <code>:</code> 
+	<br/>and this window can be closed by pressing
+	<code>q+RETURN</code>
+	</p>
+	<h1>What is this?</h1>
+	<p>ssm is a simple stream manager inspired by <a href="http://multitwitch.tv">multitwitch</a>, <a href="http://dwm.suckless.org">dwm</a>, and <a href="https://en.wikipedia.org/wiki/Vi">vi</a></p>
+	<h1>Available commands are</h1>
+<pre><code>youtube VIDEOID open youtube live stream with VIDEOID
+twitch CHANNEL  open twitch live stream at CHANNEL
+help            open this help box
+quit            close currently selected stream
 </code></pre>
 	<p> you may find...things, by looking at the source for this page</p>
 
-<br/>
-	<p>Available keybindings are </p>
+	<h1>Available keybindings are </h1>
 <pre><code>j/k   cycle through open streams
 q     opens cmdline to close selected stream (you just need to press enter)
 SPACE set selected stream as master

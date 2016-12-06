@@ -93,3 +93,40 @@ function addyt(id) {
 	str.player = ytframe(id, div.id)
 	document.getElementById(div.id).tabindex="-1"
 }
+
+/* twitch stuff */
+function addtw(ch) {
+	console.log(ch)
+	str=document.createElement("div")
+	str.classList.add("stream")
+	div=document.createElement("div")
+	div.id=uniqpid()
+	str.appendChild(div)
+	str.mute = function(m) {
+		if(this.player == null) return
+		if(arguments.length === 0)
+			m = !this.player.getMuted()
+		this.player.setMuted(m)
+	}
+	str.play = function(p) {
+		if(this.player == null) return
+		if(arguments.length === 0)
+			p = this.player.isPaused()
+		console.log(p)
+		if(p)
+			this.player.play()
+		else
+			this.player.pause()
+	}
+	addstream(str)
+	str.player = twframe(ch, div.id)
+}
+
+function twframe(ch, pid) {
+	return new Twitch.Player(pid, {
+		width: '',
+		height: '',
+		channel: ch
+	})
+}
+
