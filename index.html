@@ -88,7 +88,8 @@ var num_master = 1
 var helpstr
 function focusnext(dir) {
 	if (strs.length === 0) return
-	strs[cur].id = ""
+	if(cur >= 0 && cur < strs.length)
+		strs[cur].id = ""
 	cur += dir;
 	if (cur < 0) cur = strs.length - 1
 	if (cur >= strs.length) cur = 0
@@ -118,6 +119,10 @@ function arrange() {
 		document.body.classList.add("max")
 	else
 		document.body.classList.remove("max")
+	if(strs.length === 1)
+		document.body.classList.add("solo")
+	else
+		document.body.classList.remove("solo")
 }
 function togglelayout() {
 	b = document.body.classList
@@ -147,6 +152,7 @@ function kill(i) {
 	t = strs[i]
 	t.parentNode.removeChild(t)
 	strs.splice(i,1)
+	cur--; focusnext(1)
 	arrange()
 }
 
@@ -159,10 +165,10 @@ function morebirds() {
 
 </script>
 </head>
-<body class="max horz">
+<body class="max solo horz">
 <input type="text" tabindex="-1" class="cmdline"/>
 <div class="container">
-<div class="stream help master">
+<div class="stream help master" id="cur">
 	<img src="ssm_w.png"/>Simple Stream Manager
 	<p>
 	As of right now, the cmdline can be brought up by 

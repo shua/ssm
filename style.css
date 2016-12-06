@@ -75,6 +75,9 @@ textarea, input {
 .stream#cur {
 	border-color: #f90;
 }
+.solo .stream#cur {
+	border: 0;
+}
 
 .stream > div {
 	width: 100%;
@@ -88,6 +91,7 @@ textarea, input {
 
 .stream.help {
 	padding: 3em;
+	overflow: auto;
 }
 code {
 	border: 1px solid #444;
