@@ -10,6 +10,7 @@ function addstream(div) {
 	ct.appendChild(div)
 	if(strs.length !== 0) strs[cur].id=""
 	cur = strs.push(div) - 1
+	div.id="cur"
 	setcurmaster()
 }
 
@@ -18,6 +19,7 @@ window.onload = function() {
 	inityt()
 }
 function handleKeyKEY(k) {
+	console.log(k)
 	switch (k) {
 	case ":":
 		cmdline.focus()
@@ -28,7 +30,19 @@ function handleKeyKEY(k) {
 	case "k":
 		focusnext(-1)
 		break
-	case "s":
+	case "t":
+		togglelayout()
+		break
+	case "m":
+		mute()
+		break
+	case "M":
+		strs[cur].mute()
+		break
+	case "p":
+		play()
+		break
+	case " ":
 		setcurmaster()
 		break
 	}
@@ -61,11 +75,13 @@ function setcurmaster() {
 	if(strs[cur].className.indexOf("master") === -1) {
 		pm = strs[num_master-1]
 		pm.className = pm.className.replace(/(?:^|\s)master(?!\S)/g, '')
+		pm.mute(true)
 		strs[cur].className += " master"
 	}
 	i = strs[cur]
 	strs.splice(cur, 1)
 	strs.unshift(i)
+	i.mute(false)
 	cur = 0
 	reorder()
 }
@@ -74,6 +90,32 @@ function reorder() {
 		strs[i].style.order=i
 	}
 }
+function togglelayout() {
+	b = document.body
+	f = h = "horz"
+	t = v = "vert"
+	if(b.className.indexOf(h) === -1) {
+		f = v
+		t = h
+	}
+	if(b.className.indexOf(f) === -1)
+		b.className += " "+t
+	else
+		b.className = b.className.replace(f,t)
+}
+function mute() {
+	for(s in strs)
+		strs[s].mute(!(s < num_master && this.ismuted))
+	this.ismuted = !this.ismuted
+}
+mute.ismuted = false
+function play() {
+	this.isplaying = !this.isplaying
+	for(s in strs)
+		strs[s].play(play.isplaying)
+}
+play.isplaying = true
+
 function morebirds() {
 	cmds["youtube"](["u9Sk6-LIvDc"])
 	cmds["youtube"](["JfXiBkL9U5s"])
