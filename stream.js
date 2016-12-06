@@ -1,3 +1,12 @@
+
+/* util for players */
+function uniqpid() {
+	ret="pid"+uniqpid.curid;
+	uniqpid.curid += 1;
+	return ret;
+}
+uniqpid.curid=0;
+
 /* youtube stuff */
 
 var ytready = false
@@ -40,18 +49,11 @@ function ytframe(id, pid) {
 	return player
 }
 
-function getytplayerid() {
-	ret="ytp"+getytplayerid.curid;
-	getytplayerid.curid += 1;
-	return ret;
-}
-getytplayerid.curid=0;
-
 function addyt(id) {
 	str=document.createElement("div")
 	str.className += "stream"
 	div=document.createElement("div")
-	div.id=getytplayerid()
+	div.id=uniqpid()
 	str.appendChild(div)
 	str.mute = function(m) { 
 		if(this.player == null || this.player.mute == null) return

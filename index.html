@@ -1,10 +1,48 @@
 <html>
 <head>
+<link rel="icon" type="image/png" href="ssm_b.png"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link type="text/css" rel="stylesheet" href="style.css"/>
 <script src="cmdline.js"></script>
 <script src="stream.js"></script>
+<script src="http://player.twitch.tv/js/embed/v1.js"></script>
 <script>
+
+function addtw(ch) {
+	console.log(ch)
+	str=document.createElement("div")
+	str.classList.add("stream")
+	div=document.createElement("div")
+	div.id=uniqpid()
+	str.appendChild(div)
+	str.mute = function(m) {
+		if(this.player == null) return
+		if(arguments.length === 0)
+			m = !this.player.getMuted()
+		this.player.setMuted(m)
+	}
+	str.play = function(p) {
+		if(this.player == null) return
+		if(arguments.length === 0)
+			p = this.player.isPaused()
+		console.log(p)
+		if(p)
+			this.player.play()
+		else
+			this.player.pause()
+	}
+	addstream(str)
+	str.player = twframe(ch, div.id)
+}
+
+function twframe(ch, pid) {
+	return new Twitch.Player(pid, {
+		width: '',
+		height: '',
+		channel: ch
+	})
+}
+
 function addstream(div) {
 	ct = document.getElementsByClassName("container")[0]
 	ct.appendChild(div)
@@ -19,7 +57,6 @@ window.onload = function() {
 	inityt()
 }
 function handleKeyKEY(k) {
-	console.log(k)
 	switch (k) {
 	case ":":
 		cmdline.focus()
@@ -40,7 +77,14 @@ function handleKeyKEY(k) {
 		strs[cur].mute()
 		break
 	case "p":
+		strs[cur].play()
+		break
+	case "P":
 		play()
+		break
+	case "q":
+		cmdline.focus()
+		cmdline.value = ":"
 		break
 	case " ":
 		setcurmaster()
@@ -48,15 +92,19 @@ function handleKeyKEY(k) {
 	}
 }
 cmds = {
-	"open": function(args) {
-		console.log("open ",args)
-	},
 	"youtube": function(args) {
 		console.log("yt", args)
 		addyt(args[0])
 	},
+	"twitch": function(args) {
+		addtw(args[0])
+	},
 	"birds": function(args) {
 		morebirds()
+	},
+	"quit": function(args) {
+		if(strs.length > 0)
+			kill(cur)
 	}
 }
 cmds["yt"] = cmds["youtube"]
@@ -72,49 +120,60 @@ function focusnext(dir) {
 	strs[cur].id = "cur"
 }
 function setcurmaster() {
-	if(strs[cur].className.indexOf("master") === -1) {
+	if(!strs[cur].classList.contains("master")) {
 		pm = strs[num_master-1]
-		pm.className = pm.className.replace(/(?:^|\s)master(?!\S)/g, '')
 		pm.mute(true)
-		strs[cur].className += " master"
 	}
 	i = strs[cur]
 	strs.splice(cur, 1)
 	strs.unshift(i)
 	i.mute(false)
 	cur = 0
-	reorder()
+	arrange()
 }
-function reorder() {
+function arrange() {
 	for(let i=0; i<strs.length; i++) {
+		if(i < num_master)
+			strs[i].classList.add("master")
+		else
+			strs[i].classList.remove("master")
 		strs[i].style.order=i
 	}
+	if(strs.length <= num_master)
+		document.body.classList.add("max")
+	else
+		document.body.classList.remove("max")
 }
 function togglelayout() {
-	b = document.body
+	b = document.body.classList
 	f = h = "horz"
 	t = v = "vert"
-	if(b.className.indexOf(h) === -1) {
+	if(!b.contains(h)) {
 		f = v
 		t = h
 	}
-	if(b.className.indexOf(f) === -1)
-		b.className += " "+t
-	else
-		b.className = b.className.replace(f,t)
+	if(b.contains(f))
+		b.remove(f)
+	b.add(t)
 }
 function mute() {
 	for(s in strs)
-		strs[s].mute(!(s < num_master && this.ismuted))
-	this.ismuted = !this.ismuted
+		strs[s].mute(!(s < num_master && mute.ismuted))
+	mute.ismuted = !mute.ismuted
 }
 mute.ismuted = false
 function play() {
-	this.isplaying = !this.isplaying
+	play.isplaying = !play.isplaying
 	for(s in strs)
-		strs[s].play(play.isplaying)
+		strs[s].play()
 }
 play.isplaying = true
+function kill(i) {
+	t = strs[i]
+	t.parentNode.removeChild(t)
+	strs.splice(i,1)
+	arrange()
+}
 
 function morebirds() {
 	cmds["youtube"](["u9Sk6-LIvDc"])
@@ -122,10 +181,41 @@ function morebirds() {
 	cmds["youtube"](["qF6YkiJXfEA"])
 	cmds["youtube"](["IiFSeJhHMgY"])
 }
+
 </script>
 </head>
-<body class="horz">
+<body class="max horz">
 <input type="text" tabindex="-1" class="cmdline"/>
-<div class="container"></div>
+<div class="container">
+<div class="stream help master">
+	<img src="ssm_w.png"/>
+	<p>As of right now, the cmdline can be brought up by pressing <code>:</code></p>
+	<p>Available commands are</p>
+<pre><code>youtube VIDEOID
+twitch CHANNEL
+quit
+</code></pre>
+	<p> you may find...things, by looking at the source for this page</p>
+
+<br/>
+	<p>Available keybindings are </p>
+<pre><code>j/k   cycle through open streams
+q     opens cmdline to close selected stream (you just need to press enter)
+SPACE set selected stream as master
+</code></pre>
+
+<br/>
+<p>
+Todo:
+<ul>
+<li>h/l for increase/decrease master size</li>
+<li>H/L for increase/decrease num_master</li>
+<li>hitbox embeds (though API doesn't support play/pause and mute/unmute)</li>
+<li>grid layout (will probably require javascript instead of flex)
+</ul>
+</p>
+</div>
+<script>strs.push.apply(strs, document.getElementsByClassName("help"))</script>
+</div>
 </body>
 </html>

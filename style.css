@@ -1,7 +1,7 @@
 * {
 	margin: 0;
 	padding: 0;
-	background: #444;
+	background: #222;
 	color: #ddd;
 	font-family: monospace;
 	box-sizing: border-box;
@@ -22,7 +22,7 @@ textarea, input {
 	bottom: 0;
 	height: 0;
 	width: 0;
-	background: #222;
+	background: #444;
 }
 .cmdline:focus {
 	height: 1em;
@@ -43,6 +43,12 @@ textarea, input {
 .horz .container {
 	flex-flow: row wrap;
 }
+.max.vert .stream.master {
+	width: 100vw;
+}
+.max.horz .stream.master {
+	height: 100vh;
+}
 .vert .stream.master {
 	width: 75vw;
 }
@@ -60,7 +66,7 @@ textarea, input {
 }
 .stream {
 	flex: 1 0 10%;
-	border: 5px solid #444;
+	border: 2px solid #444;
 	width: auto;
 	height: 1;
 	max-width: 100%;
@@ -70,9 +76,41 @@ textarea, input {
 	border-color: #f90;
 }
 
+.stream > div {
+	width: 100%;
+	height: 100%;
+}
 .stream iframe {
 	width: 100%;
 	height: 100%;
 	margin: auto;
 }
 
+.stream.help {
+	padding: 3em;
+}
+code {
+	border: 1px solid #444;
+	color: #bbb;
+}
+pre {
+	border: 1px solid #444;
+	padding: 0.5em;
+}
+pre code { border: 0; }
+p {
+	margin: 0.1em;
+}
+.help img {
+	margin-top: -30px;
+	margin-bottom: 0.5em;
+	width: 100px;
+	height: 100px;
+	image-rendering: optimizeSpeed;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -o-crisp-edges;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: pixelated;
+	image-rendering: optimize-contrast;
+	-ms-interpolation-mode: nearest-neighbor;
+}
