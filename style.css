@@ -90,7 +90,7 @@ textarea, input {
 }
 
 .stream.help {
-	padding: 3em;
+	padding: 1em 3em;
 	overflow: auto;
 }
 code {
@@ -100,6 +100,7 @@ code {
 pre {
 	border: 1px solid #444;
 	padding: 0.5em;
+	overflow: auto;
 }
 pre code { border: 0; }
 p {
@@ -111,9 +112,9 @@ h1 {
 	margin-top: 1em;
 }
 .help img {
-	margin-top: -30px;
+	margin: 1em 2em;
 	width: 100px;
-	height: 100px;
+	height: 70px;
 	image-rendering: optimizeSpeed;
 	image-rendering: -moz-crisp-edges;
 	image-rendering: -o-crisp-edges;

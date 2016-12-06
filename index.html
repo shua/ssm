@@ -169,7 +169,7 @@ function morebirds() {
 <input type="text" tabindex="-1" class="cmdline"/>
 <div class="container">
 <div class="stream help master" id="cur">
-	<img src="ssm_w.png"/>Simple Stream Manager
+	<img src="ssm_w.png"/>
 	<p>
 	As of right now, the cmdline can be brought up by 
 	pressing <code>:</code> 
@@ -196,10 +196,19 @@ SPACE set selected stream as master
 <p>
 Todo:
 <ul>
+<li>test on other browsers</li>
 <li>h/l for increase/decrease master size</li>
 <li>H/L for increase/decrease num_master</li>
 <li>hitbox embeds (though API doesn't support play/pause and mute/unmute)</li>
+<li>chat embeds (have to think about this, will they go alongside the stream, or be their own?)</li>
 <li>grid layout (will probably require javascript instead of flex)
+</ul>
+</p>
+<p>
+Bugs:
+<ul>
+<li>keyboard gets eaten by iframes, click on border to get back</li>
+<li>cmdline gets cleared when switching to newtab</li>
 </ul>
 </p>
 </div>
