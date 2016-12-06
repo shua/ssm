@@ -23,6 +23,8 @@ window.onload = function() {
 	inityt()
 	handleKeyKEY = handlekey
 	helpstr = document.getElementsByClassName("help")[0]
+	helpstr.mute = () => true
+	helpstr.play = () => true
 }
 function handlekey(k) {
 	switch (k) {
