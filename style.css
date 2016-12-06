@@ -35,34 +35,33 @@ textarea, input {
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
+	width: 100%;
+	height: 100%;
 }
 .vert .container {
-	float: left;
-	flex-flow: column nowrap;
-	height: 100%;
-	width: 25%;
+	flex-flow: column wrap;
 }
 .horz .container {
-	flex-flow: row nowrap;
-	width: 100%;
-	height: 25%;
+	flex-flow: row wrap;
 }
-.vert .container#master {
-	width: 75%;
+.vert .stream.master {
+	width: 75vw;
 }
-.horz .container#master {
-	height: 75%;
+.vert .stream {
+	width: 25vw;
 }
-.container.master .stream{
-	width: 640px;
-	height: 480px;
+.horz .stream.master {
+	height: 75vh;
+}
+.horz .stream {
+	height: 25vh;
+}
+.stream.master {
+	flex: 0 1 100%;
 }
 .stream {
+	flex: 1 0;
 	border: 5px solid #444;
-/*	height: 240px;
-	width: 320px; */
-	height: 100%;
-	width: 100%;
 	max-width: 100%;
 	max-height: 100%;
 }
