@@ -123,7 +123,7 @@ var mode="KEY";
 document.onkeypress = function(e) {
 	// do I want to support ctl/alt/meta?
 	//k = strfromkeyEvt(e)
-	k=String.fromCharCode(e.keyCode)
+	k=String.fromCharCode(e.charCode)
 	handleKeyModal(k)
 }
 document.onkeydown = function(e) {
