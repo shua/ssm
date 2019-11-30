@@ -7,15 +7,26 @@ function addstream(div) {
 	cur = strs.push(div) - 1
 	div.id = "cur"
 	setcurmaster()
+	updateconfig()
 }
 
 window.onload = function() {
 	initcmdline()
 	inityt()
 	handleKeyKEY = handlekey
+
 	helpstr = document.getElementsByClassName("help")[0]
 	helpstr.mute = () => true
 	helpstr.play = () => true
+
+	if ('commands' in localStorage) {
+		kill(cur)
+		for (cstr of localStorage.commands.split(",")) {
+			c = cstr.split(" ")
+			c0 = c.shift()
+			cmds[c0](c)
+		}
+	}
 }
 
 function handlekey(k) {
@@ -56,7 +67,6 @@ function handlekey(k) {
 
 cmds = {
 	"youtube": function(args) {
-		console.log("yt", args)
 		addyt(args[0])
 	},
 	"twitch": function(args) {
@@ -149,6 +159,16 @@ function kill(i) {
 	strs.splice(i,1)
 	cur--; focusnext(1)
 	arrange()
+}
+
+function updateconfig() {
+	ccmds = []
+	for (s in strs) {
+		if ('command' in strs[s]) {
+			ccmds.push(strs[s].command)
+		}
+	}
+	localStorage.commands = ccmds
 }
 
 function morebirds() {

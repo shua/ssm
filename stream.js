@@ -1,11 +1,11 @@
 
 /* util for players */
 function uniqpid() {
-	ret="pid"+uniqpid.curid;
+	ret = "pid" + uniqpid.curid;
 	uniqpid.curid += 1;
 	return ret;
 }
-uniqpid.curid=0;
+uniqpid.curid = 0;
 
 /* youtube stuff */
 
@@ -52,8 +52,8 @@ function ytframe(id, pid) {
 function addyt(id) {
 	str=document.createElement("div")
 	str.className += "stream"
-	div=document.createElement("div")
-	div.id=uniqpid()
+	div = document.createElement("div")
+	div.id = uniqpid()
 	str.appendChild(div)
 	str.mute = function(m) { 
 		if(this.player == null || this.player.mute == null) return
@@ -89,6 +89,7 @@ function addyt(id) {
 		} else
 			this.player.pauseVideo()
 	}
+	str.command = "youtube " + id
 	addstream(str)
 	str.player = ytframe(id, div.id)
 	document.getElementById(div.id).tabindex="-1"
@@ -97,10 +98,10 @@ function addyt(id) {
 /* twitch stuff */
 function addtw(ch) {
 	console.log(ch)
-	str=document.createElement("div")
+	str = document.createElement("div")
 	str.classList.add("stream")
-	div=document.createElement("div")
-	div.id=uniqpid()
+	div = document.createElement("div")
+	div.id = uniqpid()
 	str.appendChild(div)
 	str.mute = function(m) {
 		if(this.player == null) return
@@ -118,6 +119,7 @@ function addtw(ch) {
 		else
 			this.player.pause()
 	}
+	str.command = "twitch " + ch
 	addstream(str)
 	str.player = twframe(ch, div.id)
 }

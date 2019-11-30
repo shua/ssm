@@ -20,13 +20,15 @@ textarea, input {
 .cmdline {
 	position: fixed;
 	bottom: 0;
-	height: 0;
-	width: 0;
+	left: calc(50% - 2.5em);
+	height: 1em;
+	width: 5em;
 	background: #444;
 }
 .cmdline:focus {
 	height: 1em;
 	width: 100%;
+	left: 0;
 	padding: .5em .2em;
 }
 
